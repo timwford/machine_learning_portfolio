@@ -5,6 +5,26 @@ An assembly of various machine learning models I've worked on.
 
 This common setup process should get you to a point where you can use anything provided here!
 
+This project is best used by installing packages in a Python virtual environment.
+Here are the basic steps:
+
+Make a new virtual environment
+```
+python3 -m venv env
+```
+
+Source the new environment
+```
+source env/bin/activate
+```
+
+Install the required pacakges
+```
+pip install -r requirements.txt
+```
+
+From there, run Typer's help command to see what options are available.
+
 ## Perceptron
 
 #### Theory
@@ -13,11 +33,26 @@ TBD
 
 #### Example
 
+More to come...
 
+```shell script
+python main.py perceptron
+```
+
+After running the model, we see Percy the perceptron separated the data!
+
+![Regression](images/perceptron.png)
 
 #### Use
 
-TBD
+```python
+from ML.perceptron import Perceptron
+
+# percy the Perceptron
+percy = Perceptron(rate=rate, n_iter=200)
+percy.fit(X, y)
+```
+
 
 ## Regression
 

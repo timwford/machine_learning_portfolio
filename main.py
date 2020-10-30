@@ -6,9 +6,16 @@ import pandas as pd
 import numpy as np
 import typer
 
-from ML.plotter import scatterplot
+from ML.perceptron import Perceptron
+from ML.plotter import scatterplot, plot_decision_regions
 from ML.stump import Stump
 from ML.regression import Regression
+
+# Perceptron
+iris_types = ['Iris-virginica', 'Iris-setosa', 'Iris-versicolor']
+iris_values = ["sepal_l", "sepal_w", "petal_l", "petal_w"]
+iris_type_help: str = "0 - Iris-virginica  1 - Iris-setosa 2 - Iris-versicolor"
+iris_value_help: str = "0 - sepal_l  1 - sepal_w  2 - petal_l  3 - petal_w"
 
 # Regression
 flow_data_set = 'data/flow.csv'
@@ -18,6 +25,40 @@ iris_data_set = 'https://archive.ics.uci.edu/ml/machine-learning-databases/iris/
 stump_iris_types = ['Iris-setosa', 'Iris-versicolor']
 
 app = typer.Typer()
+
+@app.command()
+def perceptron(flower1: int = typer.Option(1, help=iris_type_help),
+                    flower2: int = typer.Option(2, help=iris_type_help),
+                    col1: int = typer.Option(0, help=iris_value_help),
+                    col2: int = typer.Option(2, help=iris_value_help),
+                    rate: float = typer.Option(0.1, help="The Perceptrons' learning rate"),
+                    max_iterations: int = typer.Option(100, help="The max number of iterations the perceptron will run")):
+
+    df = pd.read_csv(iris_data_set, header=None, names=["sepal_l", "sepal_w", "petal_l", "petal_w", "breed"])
+    print(df.head())
+
+    flower1 = iris_types[flower1]
+    flower2 = iris_types[flower2]
+    flowers = [flower1, flower2]
+    print(f"\nComparing {flower1} against {flower2}")
+
+    y = df[df['breed'].isin(flowers)].iloc[:, 4].values
+    y = np.where(y == flower1, -1, 1)
+
+    value1 = col1
+    value2 = col2
+
+    print(f"\nUsing columns {iris_values[value1]} and {iris_values[value2]}")
+    X = df[df['breed'].isin(flowers)].iloc[:, [value1, value2]].values
+
+    percy = Perceptron(rate=rate, n_iter=max_iterations)
+
+    percy.fit(X, y)
+
+    print(f"Weights for fit: {percy.weights}")
+    print(f"Errors for fit: {percy.errors}")
+
+    plot_decision_regions(X, y, percy)
 
 @app.command()
 def regression():
@@ -50,4 +91,4 @@ def stump():
 
 
 if __name__ == '__main__':
-    regression()
+    app()
