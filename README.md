@@ -25,6 +25,21 @@ pip install -r requirements.txt
 
 From there, run Typer's help command to see what options are available.
 
+```
+python main.py --help
+```
+> Commands:
+  perceptron
+  regression
+  ...
+
+
+And run individual commands by specifying an option from the given list
+
+```
+python main.py perceptron
+```
+
 ## Perceptron
 
 #### Theory
