@@ -29,7 +29,8 @@ From there, run Typer's help command to see what options are available.
 
 #### Theory
 
-TBD
+A perceptron is a neural network that separates linearly separable data (single layer).
+Weights are adjusted based off an error measurements and a learning rate.
 
 #### Example
 
