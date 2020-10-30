@@ -28,10 +28,18 @@ for index in Range:
     adjust m and b
 ```
 
+#### Example
 
+Let's use sepal width of Viriginica Iris to predict their sepal width!
+Let's use [Typer](https://github.com/tiangolo/typer) to run the following command:
 
-#### Use
+```shell script
+python main.py regression
+```
 
+After running the model, we can see that our line fits the data pretty well!
+
+![Regression](images/regression.png)
 
 ## Decision Stump
 
@@ -51,7 +59,7 @@ for dimension in Dimensions:
         if the error is minimized, store that as an 'ideal' split
 ```
 
-#### Use
+#### Example
 
 Decision stumps are simple enough that they're mainly useful in more complex applications.
 They can be chained together to be able to shatter a data set more accurately.

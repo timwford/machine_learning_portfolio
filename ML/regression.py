@@ -17,14 +17,17 @@ class Regression(object):
 
     def fit(self):
         for index in range(self.count):
-            pred_y = self.m * self._x + self.b
-            error = self._y - pred_y
+            try:
+                pred_y = self.m * self._x + self.b
+                error = self._y - pred_y
 
-            m_adjust = -(2 / self._n) * np.sum(self._x * error)
-            b_adjust = -(2 / self._n) * np.sum(self._y - pred_y)
+                m_adjust = -(2 / self._n) * np.sum(self._x * error)
+                b_adjust = -(2 / self._n) * np.sum(self._y - pred_y)
 
-            self.b = self.b - self.alpha * b_adjust
-            self.m = self.m - self.alpha * m_adjust
+                self.b = self.b - self.alpha * b_adjust
+                self.m = self.m - self.alpha * m_adjust
+            except Exception as e:
+                print(e)
 
     def predict(self, value: float):
         return self.m * value + self.b

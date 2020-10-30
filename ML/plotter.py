@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 
+
 def plot_decision_regions(X, y, classifier, resolution=0.02):
     markers = ('s', 'x', 'o', '^', 'v')
     colors = ('red', 'blue', 'lightgreen', 'gray', 'cyan')
@@ -26,13 +27,14 @@ def plot_decision_regions(X, y, classifier, resolution=0.02):
     plt.show()
 
 
-def scatterplot(X, y, m, b, vertical_line = False):
-    if vertical_line:
-        pred = m * y + b
-        plt.plot([min(pred), max(pred)], [min(y), max(y)], color='red')  # regression line
-    else:
-        pred = m * X + b
-        plt.plot([min(X), max(X)], [min(pred), max(pred)], color='red')  # regression line
+def scatterplot(X, y, m=None, b=None, vertical_line=False):
+    if m and b is not None:
+        if vertical_line:
+            pred = m * y + b
+            plt.plot([min(pred), max(pred)], [min(y), max(y)], color='red')  # regression line
+        else:
+            pred = m * X + b
+            plt.plot([min(X), max(X)], [min(pred), max(pred)], color='red')  # regression line
 
     plt.scatter(X, y)
     plt.title('Plot')

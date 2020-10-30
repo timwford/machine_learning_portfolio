@@ -10,21 +10,18 @@ from ML.plotter import scatterplot
 from ML.stump import Stump
 from ML.regression import Regression
 
-iris_data_set = 'https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data'
+# Regression
+flow_data_set = 'data/flow.csv'
 
 # Stump
+iris_data_set = 'https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data'
 stump_iris_types = ['Iris-setosa', 'Iris-versicolor']
-
 
 app = typer.Typer()
 
 @app.command()
 def regression():
-    print("regression")
-
     df = pd.read_csv(iris_data_set, header=None, names=["sepal_l", "sepal_w", "petal_l", "petal_w", "breed"])
-    # print(df.head())
-
     virginica_sepal_l = df[df['breed'].isin(['Iris-virginica'])]['sepal_l']
     virginica_sepal_w = df[df['breed'].isin(['Iris-virginica'])]['sepal_w']
 
@@ -53,4 +50,4 @@ def stump():
 
 
 if __name__ == '__main__':
-    app()
+    regression()
