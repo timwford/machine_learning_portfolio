@@ -7,12 +7,21 @@ This common setup process should get you to a point where you can use anything p
 
 ## Perceptron
 
+#### Theory
+
+TBD
+
+#### Example
+
+
+
+#### Use
+
 TBD
 
 ## Regression
 
 #### Theory
-
 
 Regression is a classification that predicts a dependent variable from a input of independent variables.
 Gradient descent is used to minimize the sum of squares error, resulting in a best fit line in the form `y = m*x + b`.
@@ -40,6 +49,19 @@ python main.py regression
 After running the model, we can see that our line fits the data pretty well!
 
 ![Regression](images/regression.png)
+
+#### Use
+
+`x` and `y` should be Pandas Series, X should be your independent variables, y should be your dependent variable.
+
+```python
+from ML.regression import Regression
+
+regression = Regression(x, y)
+regression.fit()
+
+print(regression)
+```
 
 ## Decision Stump
 
@@ -84,3 +106,17 @@ python main.py stump
 From the model, we have our split and can see that it separates our data set as expected.
 
 ![Decision Stump](images/stump.png)
+
+#### Use
+
+`data` should be a a matrix of training data, with dimensions as columns.
+`labels` should be the correct classification labels.
+
+```python
+from ML.stump import Stump
+
+stump = Stump(data, labels)
+stump.fit()
+
+print(stump)
+```

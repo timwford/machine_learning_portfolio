@@ -15,6 +15,9 @@ class Regression(object):
         self._x: np.ndarray = x.to_numpy().reshape(len(x), 1)
         self._y: np.ndarray = y.to_numpy().reshape(len(x), 1)
 
+    def __str__(self):
+        return f"y = {self.m}*x + {self.b}"
+
     def fit(self):
         for index in range(self.count):
             try:
