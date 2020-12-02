@@ -171,3 +171,21 @@ stump.fit()
 
 print(stump)
 ```
+
+## Logistic Regression
+
+#### Theory
+
+Logistic regression is a linear classifier that uses a series of weights and an intercept with a sigmoid cost function to predict an input's class.
+It traditionally accepts data and the appropriate classes and then uses the sigmoid function to fit the data.
+
+#### Example
+
+I generated some random normal data and used scikit's test/train split tool to separate my data into two groups.
+If you run the `logistic_regression.py` file, the following example will use this data.
+The first group of data I trained on, for 2000 iterations and a learning rate of 0.0001.
+The next group, I predict using the fit model and measure the accuracy as well as output a graph.
+It takes a second for the model to fit, used to be quicker when I had the iterations lower and the learning rate more coarse.
+However, the logistic regression achieves an impressive 99% accuracy on this rather tricky dataset. 
+
+![Logistic Regression](images/logistic_regression.png)
