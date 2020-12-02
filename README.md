@@ -190,6 +190,8 @@ However, the logistic regression achieves an impressive 99% accuracy on this rat
 
 ![Logistic Regression](images/logistic_regression.png)
 
+#### Usage
+
 ```python
 from ML.logistic_regression import LogisticRegression
 
