@@ -189,3 +189,13 @@ It takes a second for the model to fit, used to be quicker when I had the iterat
 However, the logistic regression achieves an impressive 99% accuracy on this rather tricky dataset. 
 
 ![Logistic Regression](images/logistic_regression.png)
+
+```python
+from ML.logistic_regression import LogisticRegression
+
+# features must be of shape (-1, 2)
+model = LogisticRegression(2000, 0.0001)
+model.fit(features, classes)
+
+print(model)
+```
