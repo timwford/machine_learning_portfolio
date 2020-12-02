@@ -206,7 +206,7 @@ print(model)
 
 Find my example of an SVM at this Github link:
 
-[![SVM to Classify Audio](https://img.youtube.com/vi/watch?v=AjpTCH-_fmY/0.jpg)](https://www.youtube.com/watch?v=AjpTCH-_fmY)
+[![SVM to Classify Audio][(http://i3.ytimg.com/vi/AjpTCH-_fmY/maxresdefault.jpg)](https://www.youtube.com/watch?v=AjpTCH-_fmY)
 
 This project included making my own dataset, finding my own features, making a model from scratch, and then exposing the model over a small webserver.
 To see the 'most complete' form of this project, fire up Pycharm and run the `run_fastapi` configuration.
