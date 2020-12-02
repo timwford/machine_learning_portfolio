@@ -208,6 +208,8 @@ Find my video demonstration and example code of an SVM at this Youtube video lin
 
 [![SVM to Classify Audio](http://i3.ytimg.com/vi/AjpTCH-_fmY/maxresdefault.jpg)](https://www.youtube.com/watch?v=AjpTCH-_fmY)
 
+Or go straight to the Github page [Here](https://github.com/timwford/svm_audio_classification)
+
 This project included making my own dataset, finding my own features, making a model from scratch, and then exposing the model over a small webserver.
 To see the 'most complete' form of this project, fire up Pycharm and run the `run_fastapi` configuration.
 Then follow the link to the localhost server.
