@@ -204,7 +204,7 @@ print(model)
 
 ## SVM
 
-Find my example of an SVM at this Github link:
+Find my video demonstration and example code of an SVM at this Youtube video link:
 
 [![SVM to Classify Audio](http://i3.ytimg.com/vi/AjpTCH-_fmY/maxresdefault.jpg)](https://www.youtube.com/watch?v=AjpTCH-_fmY)
 
@@ -212,7 +212,7 @@ This project included making my own dataset, finding my own features, making a m
 To see the 'most complete' form of this project, fire up Pycharm and run the `run_fastapi` configuration.
 Then follow the link to the localhost server.
 If you open the interactive docs at the link suggested, it will present you with auto-generated OpenAPI docs.
-Click on the `status` GET request and then run 'Execute'.
+Click on the `status` GET request and then click 'Try it Out' and then run 'Execute'.
 This will record from your mic for 4 seconds. 
 If your surroundings are quiet, it should return 'OFF' in the JSON. 
 If it detects a constant white noise, best produced by a running water near your computer's default mic, 
