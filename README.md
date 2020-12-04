@@ -70,7 +70,7 @@ percy.fit(X, y)
 ```
 
 
-## Regression
+## Regression using Gradient Descent
 
 #### Theory
 
