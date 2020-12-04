@@ -121,7 +121,7 @@ def generate_ramen_point(country: str, style: str):
         country_value = country_ratings[country]
         return Point(style_value, country_value)
     except KeyError as e:
-        print(f"No data on input {str(e)}")
+        return f"No data on input {str(e)}"
 
 def can_classify_ramen(country: str, style: str) -> bool:
     try:
@@ -210,9 +210,13 @@ async def root():
           )
 async def should_i_eat_the_ramen(ramen: RamenInput):
     if can_classify_ramen(ramen.country, ramen.style):
+        print("can classify")
         result = eatTheRamenator.model.predict(generate_ramen_point(ramen.country, ramen.style))
     else:
+        print("cannot classify")
         result = generate_ramen_point(ramen.country, ramen.style)
+
+    print(result)
 
     return EatTheRamenSchema(
         eat_the_ramen=result
