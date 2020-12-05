@@ -221,3 +221,177 @@ If it detects a constant white noise, best produced by a running water near your
 Lastly, if it detects a consistent percussive noise, best produced by a high-gain recording of a dripping faucet, it will report a 'DRIP value',
 This configuration might have difficulty running on a non MacOS Catalina/Macbook Pro 16" due to the hardware interface.
 If there is difficulty, please file an issue so I can make this script more platform agnostic.
+
+## KNN
+
+A KNN uses euclidean distance to calculate what class a test point should be in.
+
+### Distance and a Class
+
+First, I decided that since we're going to be talking about euclidean space, we should come up with a construct that easily determines position in a 2-d plane.
+Here is the class I made that holds an (x,y) pair:
+
+```python
+class Point:
+    def __init__(self, x, y, label=None):
+        self.x = x
+        self.y = y
+        self.label = label
+        self.distance = None
+
+    def __str__(self):
+        return f"({self.x}, {self.y})"
+
+    def __lt__(self, other):
+        return self.distance < other.distance
+```
+
+It starts out with just an x and y value. 
+The '__str__' override just make the object easy to work with.
+And the '__lt__' override allows me to easily sort the points by distance (important for later).
+
+The distance member variable is used in the KNN in conjunction with this function (just your average euclidean distance forumula):
+
+```python
+    def distance(self, x: Point, y: Point):
+        if x is None or y is None:
+            return "Unable to do anything"
+
+        if x.x is None or x.y is None or y.x is None or y.y is None:
+            return "Unable to classify"
+
+        return np.sqrt(np.square(x.x - y.x) + np.square(x.y - y.y))
+```
+
+Now that we have this class and a way to determine distance, we can build our model.
+
+# KNN Classifier
+
+The KNN classifier has a couple basic steps.
+Firstly, we need to iterate through our training dataset and calculate the distances between our new 'test' point and all the points in our training dataset.
+We'll also grab all the unique labels in the dataset while we're looping through the training data.
+
+```python
+unique_labels = []
+        for p in self.data:
+            p.distance = self.distance(p, input_value)
+            if p.label not in unique_labels:
+                unique_labels.append(p.label)
+```
+
+Next, we'll sort the points by distance, with those closest to our training point at the beginning.
+We'll then grab the k-nearest points.
+
+```python
+self.data.sort()
+k_nearest = self.data[:self.k]
+```
+
+Lastly, we need to find which class is most 'dominant' for our test point.
+We'll do this by using our unique label list to initalize a dictionary to values of 0 for each label.
+Then, we just have to key into our dictionary to add a 'count' to a label.
+
+```python
+        dominant_class = {}
+        for label in unique_labels:
+            dominant_class[label] = 0
+
+        for p in k_nearest:
+            dominant_class[p.label] += 1
+```
+
+Then, lastly, we'll just take whatever class has the most nearest points and this is our predicted class!
+
+```python
+return max(dominant_class, key=dominant_class.get)
+```
+
+### Ramen Classification
+
+I decided to take the dataset below and engineer some features for predicting Ramen quality.
+I used 'Country' and 'Style' for my starting point, I grouped by these variables and then took the mean of the reviews those groups received.
+Then, since the reviews fell pretty hard onto their 'average review lines', I added some normally distributed jitter to give 'distance' more significance for the KNN.
+
+[Data Set](https://www.kaggle.com/residentmario/ramen-ratings)
+
+These features ended up separating pretty nicely into a 'bad ramen' (with lower average rating) group and a 'good ramen' group, with the boundary being the average of all ramen reviews!
+
+![Ramen Plot](images/ramen_plot.png)
+
+For a quick example, it turns out that ramen from a ('Bowl': 3.67 'Pack': 3.70 'Box': 4.29 'Bar': 5.00) has a higher average review.
+However, the lower average review for ramen came from ramen packaged in ('Cup': 3.50 'Can': 3.50 'Tray': 3.55).
+
+All the exploratory analysis used to find all of this out and make my final csv used for training can be found in 'exploration/Ramen Eploration.pdf' or in its Jupyter notebook of the same name.
+
+### A Web App
+
+It's very helpful to be able to be able to expose a ML model over a web app, this way it can be used anywhere and by anyone.
+FastAPI, a small ASGI web framework, does a fantastic job of this!
+
+First, for our response and request body, we need to declare a Pydantic model (provides type validation and JSON structure).
+
+```python
+class EatTheRamenSchema(BaseModel):
+    eat_the_ramen: str
+
+
+class RamenInput(BaseModel):
+    country: str
+    style: str
+```
+
+Now, we need a small class that contains our ML model.
+
+```python
+class EatTheRamen:
+    def __init__(self):
+        df = pd.read_csv("final_ramen.csv")
+
+        style_points = df['Style_value_jitter']
+        country_points = df['Country_value_jitter']
+        labels = df['label'].astype(str)
+
+        points = []
+        for i in range(len(style_points)):
+            points.append(Point(style_points[i], country_points[i], labels[i]))
+
+        model = KNN(15, points)
+
+        self.model = model
+```
+
+Now, we create our endpoint that allows you to predict whether your own ramen will taste good!
+
+```python
+@app.post("/ramen", response_model=EatTheRamenSchema)
+async def should_i_eat_the_ramen(ramen: RamenInput):
+    if can_classify_ramen(ramen.country, ramen.style):
+        print("can classify")
+        result = eatTheRamenator.model.predict(generate_ramen_point(ramen.country, ramen.style))
+    else:
+        print("cannot classify")
+        result = generate_ramen_point(ramen.country, ramen.style)
+
+    return EatTheRamenSchema(
+        eat_the_ramen=result
+    )
+```
+
+Lastly, Uvicorn, a lightweight ASGI server, is used to serve the web app.
+
+```python
+if __name__ == "__main__":
+    uvicorn.run("ramen_classification:app", host="127.0.0.1", port=5000, log_level="info")
+```  
+
+You can get this running local host by going to the 'examples/' folder and install the `requirements.txt` from there (it's pretty big so probably use a virtual environment).
+Then, you can either use the Pycharm configuration or just run the 'ramen_classification.py' file as follows
+
+```shell script
+python ramen_classification.py
+```
+
+Head to the link it spits out in the terminal and you should be greeted with a root page to either visit th localhost or hosted version!
+
+[You can expermient with it yourself here!](https://homemetricsdev.uc.r.appspot.com/docs#/default/should_i_eat_the_ramen_ramen_post) 
+

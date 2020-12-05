@@ -125,8 +125,7 @@ def generate_ramen_point(country: str, style: str):
 
 def can_classify_ramen(country: str, style: str) -> bool:
     try:
-        style_value = style_ratings[style]
-        country_value = country_ratings[country]
+        _, _ = style_ratings[style], country_ratings[country]
         return True
     except KeyError as e:
         print(f"No data on input {str(e)}")
@@ -148,9 +147,6 @@ class EatTheRamen:
         model = KNN(15, points)
 
         self.model = model
-
-    test_country = 'USA'
-    test_style = 'Pack'
 
 
 def get_style_docs(value, description: str):
